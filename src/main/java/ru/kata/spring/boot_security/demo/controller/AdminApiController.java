@@ -30,8 +30,8 @@ public class AdminApiController {
     }
 
     @GetMapping("/users")
-    public List<User> allUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> allUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
 
@@ -43,19 +43,19 @@ public class AdminApiController {
     }
 
     @GetMapping("/users/{id}")
-    public User show(@PathVariable("id") Long id) {
+    public ResponseEntity<User> show(@PathVariable("id") Long id) {
         User user = userService.getUserById(id);
         if(user==null){
             throw new UserNotFoundException("User с ID " + id + " в базе данных отсутствует");
         }
 
-        return user;
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/users")
-    public User update(@RequestBody User user) {
+    public ResponseEntity<HttpStatus> update(@RequestBody User user) {
         userService.updateUser(user, user.getId());
-        return user;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
